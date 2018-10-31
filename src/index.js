@@ -55,6 +55,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      stepOrderAscending: true,
       boardSize: 3,
     };
   }
@@ -88,12 +89,18 @@ class Game extends React.Component {
     });
   }
 
+  sortMoves() {
+    this.setState({
+      stepOrderAscending: !this.state.stepOrderAscending,
+    })
+  }
+
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
     const winner= calculateWinner(current.squares);
 
-    const moves = history.map((step, move) => {
+    let moves = history.map((step, move) => {
       const desc = move ?
         `Show board at move #${move} -- Col: ${step.movelocation.col}, Row: ${step.movelocation.row}` :
         `Go to game start`;
@@ -103,6 +110,7 @@ class Game extends React.Component {
         </li>
       );
     });
+    if (!this.state.stepOrderAscending) moves = moves.slice().reverse();
 
     let status;
     if (winner) {
@@ -121,6 +129,7 @@ class Game extends React.Component {
         </div>
         <div className="game-info">
           <div>{status}</div>
+          <button onClick={() => this.sortMoves()}>Sort Moves</button>
           <ol>{moves}</ol>
         </div>
       </div>
