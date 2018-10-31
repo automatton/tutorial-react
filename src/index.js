@@ -55,7 +55,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
-      boardSize: 5,
+      boardSize: 3,
     };
   }
 
