@@ -23,24 +23,23 @@ class Board extends React.Component {
     );
   }
 
+  createTable = () => {
+    const boardSize = this.props.boardSize;
+    let table = []
+    for (let i = 0; i < boardSize; i++) {
+      let children = []
+      for (let j = 0; j < boardSize; j++) {
+        children.push(this.renderSquare(i*boardSize + j));
+      }
+      table.push(<div className="board-row">{children}</div>)
+    }
+    return table;
+  }
+
   render() {
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {this.createTable()}
       </div>
     );
   }
@@ -56,6 +55,7 @@ class Game extends React.Component {
       }],
       stepNumber: 0,
       xIsNext: true,
+      boardSize: 5,
     };
   }
 
@@ -68,8 +68,8 @@ class Game extends React.Component {
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
     const movelocation = {
-      col: i % 3,
-      row: parseInt(i / 3),
+      col: i % this.state.boardSize,
+      row: parseInt(i / this.state.boardSize),
     }
     this.setState({
       history: history.concat([{
@@ -114,6 +114,7 @@ class Game extends React.Component {
       <div className="game">
         <div className="game-board">
           <Board
+            boardSize={this.state.boardSize}
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
           />
